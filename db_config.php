@@ -8,8 +8,15 @@ define("FTP_SERVER", "ftp.ashio.me");
 define("FTP_USER", "fanele@ashio.me");
 define("FTP_PASSWORD", "Iminlove2404");*/
 
+/*
 define('DB_SERVER','localhost');
 #define('DB_USER', 'root');
 define('DB_USER', 'root');
 define('DB_PASSWORD', 'fanelesibonge');
 define('DB_DATABASE', 'masivaye_1');
+*/
+
+define("DB_SERVER", 'localhost');
+define("DB_USER", 'root');
+define("DB_PASSWORD", '');
+define("DB_DATABASE", 'simple_ride');
