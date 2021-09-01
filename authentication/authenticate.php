@@ -28,9 +28,9 @@ $con = new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_DATABASE) or die($con->err
 $json = json_decode(file_get_contents('php://input'), true);
 
 
-if (!empty($json['phoneNum']) && !empty($json['password']) && !empty($json['is_user'])) {
+if (!empty($json['phone_num']) && !empty($json['password']) && !empty($json['is_user'])) {
 
-	$phoneNum = $json['phoneNum'];
+	$phoneNum = $json['phone_num'];
 	$password = $json['password'];
 
 	if (checkRegistration($con, $phoneNum, $password)) {
@@ -41,17 +41,17 @@ if (!empty($json['phoneNum']) && !empty($json['password']) && !empty($json['is_u
 		$response["success"] = 0;
 		$response["message"] = "Authentication failed. Register first.";
 	}
-} elseif (!empty($json['phoneNum']) && !empty($json['password']) && !empty($json['is_driver'])) {
+} elseif (!empty($json['phone_num']) && !empty($json['password']) && !empty($json['is_driver'])) {
 
-	$phoneNum = $json['phoneNum'];
+	$phoneNum = $json['phone_num'];
 	$password = $json['password'];
 
 	if (checkRegistrationDriver($con, $phoneNum, $password)) {
 		$response['id'] = (int)$temp['id'];
-		$response['firstName'] = $temp['firstName'];
-		$response['lastName'] = $temp['lastName'];
-		$response['idNum'] = $temp['idNum'];
-		$response['phoneNum'] = $temp['phoneNum'];
+		$response['first_name'] = $temp['first_name'];
+		$response['last_name'] = $temp['last_name'];
+		$response['id_number'] = $temp['id_number'];
+		$response['phone_num'] = $temp['phone_num'];
 		$response['profileUrl'] = $temp['profileUrl'];
 	} else {
 		$response['success'] = 0;
@@ -77,10 +77,10 @@ function checkRegistration($con, $phoneNum, $password)
 		$row = $result->fetch_assoc();
 		$temp = array(
 			"id" => $row["user_id"],
-			"firstName" => $row["first_name"],
-			"lastName" => $row["last_name"],
-			"email" => $row["email"],
-			"phoneNum" => $row["phone_num"],
+			"first_name" => $row["first_name"],
+			"last_name" => $row["last_name"],
+			"id_number" => $row["id_number"],
+			"phone_num" => $row["phone_num"],
 			"profileUrl" => $row["profile_image"],
 			"driver" => false,
 		);
@@ -111,10 +111,10 @@ function checkRegistrationDriver($con, $phoneNum, $password)
 		$row = $result->fetch_assoc();
 		$temp = array(
 			"id" => $row['driver_id'],
-			"firstName" => $row['first_name'],
-			"lastName" => $row['last_name'],
-			"idNum" => $row['identity_number'],
-			"phoneNum" => $row['phone_num'],
+			"first_name" => $row['first_name'],
+			"last_name" => $row['last_name'],
+			"id_number" => $row['identity_number'],
+			"phone_num" => $row['phone_num'],
 			"profileUrl" => $row['profile_image']
 		);
 

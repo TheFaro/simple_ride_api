@@ -31,24 +31,24 @@ if (!empty($json['first_name']) && !empty($json['last_name']) && !empty($json['p
 
 	$firstName = $json['first_name'];
 	$lastName = $json['last_name'];
-	$email = $json['email'];
+	$idNum = $json['id_number'];
 	$phoneNum = $json['phone_num'];
 	$password = $json['password'];
 
-	if (checkUserRegistration($con, $email, $phoneNum)) {
+	if (checkUserRegistration($con, $idNum, $phoneNum)) {
 		//user is already registered.
 		$response["success"] = 0;
 		$response["message"] = "User has already been registered. Login instead.";
 	} else {
 		//user has not been registered yet.
-		if (registerUser($con, $firstName, $lastName, $email, $phoneNum, $password)) {
+		if (registerUser($con, $firstName, $lastName, $idNum, $phoneNum, $password)) {
 			//user has been registered successfully.
 			$temp = array();
-			$temp["id"] = $con->insert_id;
-			$temp["firstName"] = $firstName;
-			$temp["lastName"] = $lastName;
-			$temp["email"] = $email;
-			$temp["phoneNum"] = $phoneNum;
+			$temp["user_id"] = $con->insert_id;
+			$temp["first_name"] = $firstName;
+			$temp["last_name"] = $lastName;
+			$temp["id_number"] = $idNum;
+			$temp["phone_num"] = $phoneNum;
 			$temp["driver"] = false;
 
 			$response['payload'] = $temp;
@@ -67,10 +67,10 @@ if (!empty($json['first_name']) && !empty($json['last_name']) && !empty($json['p
 echo json_encode($response);
 
 
-function checkUserRegistration($con, $email, $phoneNum)
+function checkUserRegistration($con, $idNum, $phoneNum)
 {
 
-	$sql = "SELECT * FROM user_data WHERE email = '$email' AND phone_num = '$phoneNum'";
+	$sql = "SELECT * FROM `user_data` WHERE `id_number` = '$idNum' AND `phone_num` = '$phoneNum'";
 	$result = $con->query($sql);
 
 	if ($result->num_rows > 0) {
@@ -82,11 +82,11 @@ function checkUserRegistration($con, $email, $phoneNum)
 	}
 }
 
-function registerUser($con, $firstName, $lastName, $email, $phoneNum, $password)
+function registerUser($con, $firstName, $lastName, $idNum, $phoneNum, $password)
 {
 	global $response;
 
-	$sql = "INSERT INTO user_data(first_name, last_name, email, phone_num, password, profile_image, create_time) VALUES('$firstName', '$lastName', '$email', '$phoneNum', '$password', NULL, CURRENT_TIMESTAMP)";
+	$sql = "INSERT INTO user_data(first_name, last_name, id_number, phone_num, password, profile_image, create_time) VALUES('$firstName', '$lastName', '$idNum', '$phoneNum', '$password', NULL, CURRENT_TIMESTAMP)";
 
 	if ($con->query($sql)) {
 		//inserted successfully.

@@ -27,12 +27,26 @@ $responser = array();
 $con = new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_DATABASE) or die($con->error);
 $json = json_decode(file_get_contents('php://input'), true);
 
-if (!empty($json['user_id'])) {
+if (!empty($json['user_id']) && !empty($json['image'])) {
 	$userId = $json['user_id'];
-	$image = $json['image'];
+	$image = $json['image'];  /// image in base64 encoded format
+
+	// append image to user information in user_data relation
+	$sql = "UPDATE `user_data` SET profile_image = '$image' WHERE `user_id` = '$userId'";
+
+	if ($con->query($sql)) {
+
+		// success
+		$response['success'] = 1;
+		$response['message'] = "Successfully uploaded image.";
+	} else {
+
+		$response['success'] = 0;
+		$response['message'] = 'Image not added. Please try again later.';
+	}
 
 	//image meta-data
-	if ($image != null) {
+	/*if ($image != null) {
 		$ext = $json['extension'];
 		$imageName = md5(time()) . ".png";
 		$serverUrl = ""; //todo: put path url for profile images  //"https://vybe.ashio.me/images/userProfilePics/$imageName";
@@ -57,7 +71,7 @@ if (!empty($json['user_id'])) {
 	} else {
 		$response["success"] = 0;
 		$response["message"] = "No image has been selected.";
-	}
+	}*/
 } else {
 	$response["success"] = 0;
 	$response["message"] = "Required fields missing.";
